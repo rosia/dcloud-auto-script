@@ -1,6 +1,6 @@
 import paramiko
 from paramiko import SSHClient
-
+#
 switches = {'Sharedservices':'198.18.128.100', 'Fusion':'198.18.128.101', 'Core':'198.18.128.103',
 'Edge1':'198.18.128.102', 'Edge2':'198.18.128.104'}
 client = SSHClient()
