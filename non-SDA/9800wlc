@@ -1,0 +1,6 @@
+wireless management interface GigabitEthernet1
+username dnacadmin privilege 15 secret C1sco12345
+netconf-yang
+aaa new-model
+aaa authorization exec default local
+logging buffered 1024000

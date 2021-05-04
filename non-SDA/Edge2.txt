@@ -1,0 +1,36 @@
+hostname Edge2
+vlan 102
+name management
+vlan 19
+name AP_Vlan
+ vlan 30
+ name Wired_client
+ vlan 31
+ name wireless_client_Flex
+interface GigabitEthernet1/0/2
+ description to AP3800
+ switchport trunk native vlan 19
+ switchport mode trunk
+interface GigabitEthernet1/0/22
+ switchport mode trunk
+interface GigabitEthernet1/0/23
+ switchport mode trunk
+interface Vlan102
+ ip address 172.16.102.7 255.255.255.0
+ip route 0.0.0.0 0.0.0.0 172.16.102.5
+logging buffered 1024000
+username dna-8 privilege 15 password 0 C1sco12345
+username dnacadmin privilege 15 password 0 C1sco12345
+enable password C1sco12345
+ip domain name dcloud.cisco.com
+ip domain-name dcloud.cisco.com
+ip ssh version 2
+line vty 0 15
+login local
+ip vrf Mgmt
+ip route vrf Mgmt 0.0.0.0 0.0.0.0 198.18.128.1
+interface GigabitEthernet1/0/24
+ no switchport
+ ip vrf forwarding Mgmt
+ ip address 198.18.128.104 255.255.192.0
+ no shut

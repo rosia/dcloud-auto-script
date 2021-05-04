@@ -1,0 +1,41 @@
+hostname Fusion
+ip routing
+interface GigabitEthernet1/0/20
+ switchport trunk allowed vlan 102
+ switchport mode trunk
+interface GigabitEthernet1/0/21
+ switchport trunk allowed vlan 102
+ switchport mode trunk
+interface GigabitEthernet1/0/22
+ switchport trunk allowed vlan 102
+ switchport mode trunk
+interface GigabitEthernet1/0/23
+ switchport trunk allowed vlan 102
+ switchport mode trunk
+vlan 102
+name mgmt
+interface Vlan102
+ ip address 172.16.102.4 255.255.255.0
+ ip ospf 1 area 0
+interface Loopback0
+ ip address 172.16.99.2 255.255.255.255
+ no shut
+ ip ospf 1 area 0
+router ospf 1
+ router-id 172.16.99.2
+logging buffered 1024000
+username dna-8 privilege 15 password 0 C1sco12345
+username dnacadmin privilege 15 password 0 C1sco12345
+enable password C1sco12345
+ip domain name dcloud.cisco.com
+ip domain-name dcloud.cisco.com
+ip ssh version 2
+line vty 0 15
+login local
+ip vrf Mgmt
+ip route vrf Mgmt 0.0.0.0 0.0.0.0 198.18.128.1
+interface GigabitEthernet1/0/24
+ no switchport
+ ip vrf forwarding Mgmt
+ ip address 198.18.128.101 255.255.192.0
+ no shut

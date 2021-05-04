@@ -1,0 +1,101 @@
+
+hostname Core
+ip routing
+ip dhcp excluded-address 172.16.19.1
+ip dhcp excluded-address 172.16.20.1
+ip dhcp excluded-address 172.16.22.1
+ip dhcp excluded-address 172.16.30.1
+ip dhcp excluded-address 172.16.31.1
+ip dhcp excluded-address 172.16.40.1
+ip dhcp excluded-address 172.16.41.1
+ip dhcp pool AP_vlan
+ network 172.16.19.0 255.255.255.0
+ default-router 172.16.19.1
+ option 43 ascii "5A1N;B2;K4;I198.18.129.100;J80"
+ip dhcp pool AP_vlan_Edge2
+ network 172.16.20.0 255.255.255.0
+ default-router 172.16.20.1
+ option 43 ascii "5A1N;B2;K4;I198.18.129.100;J80"
+ip dhcp pool sensor_vlan
+ network 172.16.22.0 255.255.255.0
+ default-router 172.16.22.1
+ option 43 ascii "5A1N;B2;K4;I198.18.129.100;J80"
+ip dhcp pool clientpool30
+ network 172.16.30.0 255.255.255.0
+ default-router 172.16.30.1
+ dns-server 198.18.133.1
+ip dhcp pool clientpool31
+ network 172.16.31.0 255.255.255.0
+ default-router 172.16.31.1
+ dns-server 198.18.133.1
+ip dhcp pool clientpool40
+ network 172.16.40.0 255.255.255.0
+ default-router 172.16.40.1
+ dns-server 198.18.133.1
+ip dhcp pool clientpool41
+ network 172.16.41.0 255.255.255.0
+ default-router 172.16.41.1
+ dns-server 198.18.133.1
+interface GigabitEthernet1/0/18
+ switchport mode trunk
+interface GigabitEthernet1/0/19
+ switchport mode trunk
+interface GigabitEthernet1/0/20
+ switchport mode trunk
+interface GigabitEthernet1/0/21
+ switchport mode trunk
+interface GigabitEthernet1/0/22
+ switchport mode trunk
+interface GigabitEthernet1/0/23
+ switchport mode trun
+vlan 19
+ name AP_Vlan
+ vlan 22
+ name Sensor_Vlan
+ vlan 30
+ name Wired_client
+ vlan 31
+ name wireless_client_Flex
+ vlan 102
+ name mgmt
+interface Vlan19
+ description AP_Vlan
+ ip address 172.16.19.1 255.255.255.0
+ ip ospf 1 area 0
+interface Vlan22
+ description Sensor_Vlan
+ ip address 172.16.22.1 255.255.255.0
+ ip ospf 1 area 0
+interface Vlan30
+ description Wired_client
+ ip address 172.16.30.1 255.255.255.0
+ ip ospf 1 area 0
+interface Vlan31
+ description wireless_client_flex
+ ip address 172.16.31.1 255.255.255.0
+ ip ospf 1 area 0
+interface Vlan102
+ ip address 172.16.102.5 255.255.255.0
+ ip ospf 1 area 0
+interface Loopback0
+ ip address 172.16.99.3 255.255.255.255
+ no shut
+ ip ospf 1 area 0
+router ospf 1
+ router-id 172.16.99.3
+logging buffered 1024000
+username dna-8 privilege 15 password 0 C1sco12345
+username dnacadmin privilege 15 password 0 C1sco12345
+enable password C1sco12345
+ip domain name dcloud.cisco.com
+ip domain-name dcloud.cisco.com
+ip ssh version 2
+line vty 0 15
+login local
+ip vrf Mgmt
+ip route vrf Mgmt 0.0.0.0 0.0.0.0 198.18.128.1
+interface GigabitEthernet1/0/24
+ no switchport
+ ip vrf forwarding Mgmt
+ ip address 198.18.128.103 255.255.192.0
+ no shut

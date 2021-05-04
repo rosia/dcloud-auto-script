@@ -1,0 +1,81 @@
+hostname Sharedservices
+ip routing
+vlan 102
+ name Fusion_interconnect
+vlan 114
+ name dot1x
+vlan 18
+ name DEVICE_MGMT
+vlan 119
+name Guest-int
+vlan 120
+name Sensorvlan
+vlan 121
+ name WLC_AutoInstall
+ip dhcp excluded-address 10.100.114.1
+ip dhcp pool clientpool114
+ network 172.16.114.0 255.255.255.0
+ default-router 172.16.114.1
+ dns-server 198.18.133.1
+ip dhcp excluded-address 172.16.119.1
+ip dhcp pool guestpool119
+ network 172.16.119.0 255.255.255.0
+ default-router 172.16.119.1
+ dns-server 198.18.133.1
+ip dhcp excluded-address 172.16.120.1
+ip dhcp pool sensorprovisioning
+ network 172.16.120.0 255.255.255.0
+ default-router 172.16.120.1
+ dns-server 198.18.133.1
+ domain-name dcloud.cisco.com
+interface GigabitEthernet1/0/21
+ switchport trunk allowed vlan 102
+ switchport mode trunk
+interface GigabitEthernet1/0/22
+ switchport trunk allowed vlan 102
+ switchport mode trunk
+interface GigabitEthernet1/0/23
+interface GigabitEthernet1/0/24
+ description to TOP network
+ no switchport
+ ip address 198.18.128.100 255.255.192.0
+ ip ospf 1 area 0
+interface GigabitEthernet1/0/20
+ description to WLC3504
+ switchport mode trunk
+interface Vlan102
+ ip address 172.16.102.3 255.255.255.0
+ ip ospf 1 area 0
+interface Vlan114
+ description dot1x
+ ip address 172.16.114.1 255.255.255.0
+ ip helper-address 198.18.133.1
+ ip ospf 1 area 0
+interface Vlan18
+ ip address 172.16.18.1 255.255.255.0
+ ip ospf 1 area 0
+interface Vlan119
+ description Guest-Int
+ ip address 172.16.119.1 255.255.255.0
+ ip helper-address 198.18.133.1
+ ip ospf 1 area 0
+interface Vlan120
+ description Sensorprovisioning
+ ip address 172.16.120.1 255.255.255.0
+ ip helper-address 198.18.133.1
+ ip ospf 1 area 0
+interface Loopback0
+ ip address 172.16.99.1 255.255.255.255
+ no shut
+ ip ospf 1 area 0
+router ospf 1
+ router-id 172.16.99.1
+logging buffered 1024000
+username dna-8 privilege 15 password 0 C1sco12345
+username dnacadmin privilege 15 password 0 C1sco12345
+enable password C1sco12345
+ip domain name dcloud.cisco.com
+ip domain-name dcloud.cisco.com
+ip ssh version 2
+line vty 0 15
+login local
